@@ -19,7 +19,9 @@ jobs:
           test: false
           lint: false
           leanchecker: true
+          leanchecker-args: "SpecToProof"
           axiom-audit: true
+          axiom-audit-root: "SpecToProof"
           use-mathlib-cache: false
       - uses: astral-sh/setup-uv@v6
         with:
