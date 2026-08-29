@@ -15,6 +15,12 @@ from spec_to_proof.contracts import (
     FunctionContract,
     load_contract_directory,
 )
+from spec_to_proof.receipts import (
+    ReceiptError,
+    generate_receipts,
+    verify_receipts,
+    write_receipts,
+)
 from spec_to_proof.templates import render_spec_skeleton
 
 
@@ -48,6 +54,15 @@ def build_parser() -> argparse.ArgumentParser:
     compare.add_argument("--output", type=Path, default=Path("artifacts/comparison"))
     compare.add_argument("--seed", type=int, default=259)
     compare.add_argument("--samples", type=int, default=100)
+
+    receipts = commands.add_parser("receipts", help="Generate or verify proof receipts")
+    receipt_commands = receipts.add_subparsers(dest="receipt_command", required=True)
+    generate = receipt_commands.add_parser("generate", help="Generate proof receipts")
+    generate.add_argument("--output", type=Path, default=Path("artifacts/receipts"))
+    generate.add_argument("--lake", default="lake")
+    verify = receipt_commands.add_parser("verify", help="Verify proof receipts")
+    verify.add_argument("--receipts", type=Path, default=Path("artifacts/receipts"))
+    verify.add_argument("--lake", default="lake")
     return parser
 
 
@@ -85,6 +100,22 @@ def _run(args: argparse.Namespace) -> int:
             f"weak-test false negatives: {report.weak_false_negatives}; "
             f"report: {args.output}"
         )
+        return 0
+
+    if args.command == "receipts":
+        if args.receipt_command == "generate":
+            receipts = generate_receipts(
+                contracts_directory=args.contracts,
+                lake=args.lake,
+            )
+            write_receipts(receipts, args.output)
+            print(f"Generated {len(receipts)} verified receipts in {args.output}")
+        else:
+            receipts = verify_receipts(
+                receipts_directory=args.receipts,
+                lake=args.lake,
+            )
+            print(f"Verified {len(receipts)} proof receipts")
         return 0
 
     contracts = load_contract_directory(args.contracts)
@@ -134,6 +165,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             json.dumps({"error": exc.diagnostic.as_dict()}, sort_keys=True),
             file=sys.stderr,
         )
+        return 2
+    except ReceiptError as exc:
+        error = {"error": {"code": "RECEIPT_INVALID", "message": str(exc)}}
+        print(json.dumps(error), file=sys.stderr)
         return 2
     except OSError as exc:
         diagnostic = ContractDiagnostic(
