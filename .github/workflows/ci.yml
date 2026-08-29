@@ -18,6 +18,8 @@ jobs:
           build: true
           test: false
           lint: false
+          leanchecker: true
+          axiom-audit: true
           use-mathlib-cache: false
       - uses: astral-sh/setup-uv@v6
         with:
