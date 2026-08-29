@@ -29,4 +29,7 @@ jobs:
           enable-cache: true
       - run: uv sync --all-groups --locked --no-editable
       - run: uv run ruff check .
-      - run: uv run pytest
+      - run: uv run coverage run -m pytest
+      - run: uv run coverage report --fail-under=85
+      - run: uv build
+      - run: uv run spec-to-proof demo --lake lake --output artifacts/demo

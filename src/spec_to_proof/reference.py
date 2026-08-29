@@ -22,6 +22,14 @@ def faulty_clamp(value: int, lower: int, upper: int) -> int:
     return min(value, upper)
 
 
+def increment_all(values: list[int]) -> list[int]:
+    return [value + 1 for value in values]
+
+
+def sort_pair(left: int, right: int) -> list[int]:
+    return [left, right] if left <= right else [right, left]
+
+
 def parse_bit(value: str) -> int | None:
     if value == "0":
         return 0
@@ -41,6 +49,8 @@ ReferenceFunction = Callable[..., Any]
 REFERENCE_FUNCTIONS: dict[str, ReferenceFunction] = {
     "saturating-add": saturating_add,
     "clamp": clamp,
+    "increment-all": increment_all,
+    "sort-pair": sort_pair,
     "parse-bit": parse_bit,
 }
 

@@ -8,6 +8,7 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
+from spec_to_proof.boundary import write_boundary
 from spec_to_proof.comparison import run_comparison, write_comparison_report
 from spec_to_proof.contracts import (
     ContractDiagnostic,
@@ -15,6 +16,7 @@ from spec_to_proof.contracts import (
     FunctionContract,
     load_contract_directory,
 )
+from spec_to_proof.demo import run_demo
 from spec_to_proof.receipts import (
     ReceiptError,
     generate_receipts,
@@ -63,6 +65,13 @@ def build_parser() -> argparse.ArgumentParser:
     verify = receipt_commands.add_parser("verify", help="Verify proof receipts")
     verify.add_argument("--receipts", type=Path, default=Path("artifacts/receipts"))
     verify.add_argument("--lake", default="lake")
+
+    boundary = commands.add_parser("boundary", help="Generate the reviewed Python boundary")
+    boundary.add_argument("--output", type=Path, default=Path("artifacts/boundary.py"))
+
+    demo = commands.add_parser("demo", help="Run the complete spec-to-proof demonstration")
+    demo.add_argument("--output", type=Path, default=Path("artifacts/demo"))
+    demo.add_argument("--lake", default="lake")
     return parser
 
 
@@ -116,6 +125,16 @@ def _run(args: argparse.Namespace) -> int:
                 lake=args.lake,
             )
             print(f"Verified {len(receipts)} proof receipts")
+        return 0
+
+    if args.command == "boundary":
+        contracts = write_boundary(args.output, args.contracts)
+        print(f"Generated boundary for {len(contracts)} contracts at {args.output}")
+        return 0
+
+    if args.command == "demo":
+        summary = run_demo(output_directory=args.output, lake=args.lake)
+        print(json.dumps(summary, indent=2, sort_keys=True))
         return 0
 
     contracts = load_contract_directory(args.contracts)
