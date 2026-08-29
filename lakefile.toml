@@ -1,0 +1,10 @@
+name = "spec-to-proof-coding-lab"
+version = "0.1.0"
+defaultTargets = ["SpecToProof", "specToProofSmoke"]
+
+[[lean_lib]]
+name = "SpecToProof"
+
+[[lean_exe]]
+name = "specToProofSmoke"
+root = "Main"
