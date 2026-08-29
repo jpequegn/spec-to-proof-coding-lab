@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "sort-pair",
+  "title": "Sort a pair",
+  "summary": "Return two natural numbers in ascending order without changing the members.",
+  "input_type": "Nat x Nat",
+  "output_type": "Nat x Nat",
+  "preconditions": [
+    "none: the function is total for natural-number pairs"
+  ],
+  "postconditions": [
+    "the first output is less than or equal to the second",
+    "the output pair contains exactly the two input values"
+  ],
+  "invariants": [
+    "the output sum equals the input sum"
+  ],
+  "examples": [
+    {"input": [2, 7], "output": [2, 7]},
+    {"input": [9, 3], "output": [3, 9]},
+    {"input": [4, 4], "output": [4, 4]}
+  ],
+  "non_goals": [
+    "sorting lists longer than two elements"
+  ],
+  "ambiguity_notes": [
+    "resolved: ordering is ascending and equality is allowed"
+  ],
+  "theorem_names": [
+    "SpecToProof.sortPair_ordered",
+    "SpecToProof.sortPair_sum"
+  ]
+}

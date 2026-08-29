@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "clamp",
+  "title": "Clamp into an inclusive interval",
+  "summary": "Return a natural number constrained to an inclusive lower and upper bound.",
+  "input_type": "Nat x Nat x Nat",
+  "output_type": "Nat",
+  "preconditions": [
+    "lower is less than or equal to upper"
+  ],
+  "postconditions": [
+    "result is greater than or equal to lower",
+    "result is less than or equal to upper"
+  ],
+  "invariants": [
+    "a value already inside the interval is unchanged"
+  ],
+  "examples": [
+    {"input": [5, 0, 10], "output": 5},
+    {"input": [12, 0, 10], "output": 10},
+    {"input": [2, 4, 9], "output": 4}
+  ],
+  "non_goals": [
+    "behavior for an interval whose lower bound exceeds its upper bound"
+  ],
+  "ambiguity_notes": [
+    "resolved: both interval endpoints are inclusive"
+  ],
+  "theorem_names": [
+    "SpecToProof.clamp_lower",
+    "SpecToProof.clamp_upper",
+    "SpecToProof.clamp_eq_self"
+  ]
+}
