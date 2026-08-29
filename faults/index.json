@@ -1,0 +1,29 @@
+[
+  {
+    "fault_id": "saturating-add-off-by-one",
+    "contract_id": "saturating-add",
+    "faulty_definition": "SpecToProof.faultySaturatingAdd",
+    "witness_theorem": "SpecToProof.faultySaturatingAdd_exceeds_cap",
+    "violated_claim": "result is less than or equal to cap",
+    "status": "rejected",
+    "test_gap": "Examples that do not overflow the cap return the expected sum."
+  },
+  {
+    "fault_id": "clamp-missing-lower-bound",
+    "contract_id": "clamp",
+    "faulty_definition": "SpecToProof.faultyClamp",
+    "witness_theorem": "SpecToProof.faultyClamp_ignores_lower",
+    "violated_claim": "result is greater than or equal to lower",
+    "status": "rejected",
+    "test_gap": "Examples at or above the lower bound do not exercise the missing branch."
+  },
+  {
+    "fault_id": "parse-bit-leading-zero",
+    "contract_id": "parse-bit",
+    "faulty_definition": "SpecToProof.faultyParseBit",
+    "witness_theorem": "SpecToProof.faultyParseBit_accepts_leading_zero",
+    "violated_claim": "every string other than zero and one parses as none",
+    "status": "rejected",
+    "test_gap": "The reviewed examples include zero, one, and ten but not a leading-zero form."
+  }
+]
