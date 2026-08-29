@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "parse-bit",
+  "title": "Parse a binary digit",
+  "summary": "Recognize exactly the strings zero and one as binary digits.",
+  "input_type": "String",
+  "output_type": "Option Nat",
+  "preconditions": [
+    "none: every string is accepted as input"
+  ],
+  "postconditions": [
+    "zero parses as some zero and one parses as some one",
+    "every other string parses as none"
+  ],
+  "invariants": [
+    "every returned number is less than or equal to one"
+  ],
+  "examples": [
+    {"input": "0", "output": 0},
+    {"input": "1", "output": 1},
+    {"input": "10", "output": null}
+  ],
+  "non_goals": [
+    "parsing multi-character binary numbers"
+  ],
+  "ambiguity_notes": [
+    "resolved: whitespace and signs are rejected rather than trimmed"
+  ],
+  "theorem_names": [
+    "SpecToProof.parseBit_zero",
+    "SpecToProof.parseBit_one",
+    "SpecToProof.parseBit_sound"
+  ]
+}

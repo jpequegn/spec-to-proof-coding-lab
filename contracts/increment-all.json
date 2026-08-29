@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "increment-all",
+  "title": "Increment every list element",
+  "summary": "Add one to every natural number in a list while preserving its shape.",
+  "input_type": "List Nat",
+  "output_type": "List Nat",
+  "preconditions": [
+    "none: the function is total for finite lists"
+  ],
+  "postconditions": [
+    "output equals input mapped through addition by one"
+  ],
+  "invariants": [
+    "output length equals input length"
+  ],
+  "examples": [
+    {"input": [], "output": []},
+    {"input": [0, 2, 5], "output": [1, 3, 6]}
+  ],
+  "non_goals": [
+    "bounded machine integer overflow"
+  ],
+  "ambiguity_notes": [
+    "resolved: natural-number addition is unbounded"
+  ],
+  "theorem_names": [
+    "SpecToProof.incrementAll_eq_map",
+    "SpecToProof.incrementAll_length"
+  ]
+}

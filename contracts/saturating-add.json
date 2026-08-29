@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "saturating-add",
+  "title": "Saturating addition",
+  "summary": "Add two natural numbers without returning a value above a supplied cap.",
+  "input_type": "Nat x Nat x Nat",
+  "output_type": "Nat",
+  "preconditions": [
+    "none: the function is total for natural numbers"
+  ],
+  "postconditions": [
+    "result equals min (left + right) cap",
+    "result is less than or equal to cap"
+  ],
+  "invariants": [
+    "when left + right is at most cap, result equals left + right"
+  ],
+  "examples": [
+    {"input": [2, 3, 10], "output": 5},
+    {"input": [8, 7, 10], "output": 10},
+    {"input": [0, 4, 3], "output": 3}
+  ],
+  "non_goals": [
+    "machine integer overflow behavior"
+  ],
+  "ambiguity_notes": [
+    "resolved: cap is inclusive and the result may equal it"
+  ],
+  "theorem_names": [
+    "SpecToProof.saturatingAdd_eq_min",
+    "SpecToProof.saturatingAdd_le_cap"
+  ]
+}
