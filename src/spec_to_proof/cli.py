@@ -8,6 +8,7 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
+from spec_to_proof.comparison import run_comparison, write_comparison_report
 from spec_to_proof.contracts import (
     ContractDiagnostic,
     ContractError,
@@ -41,6 +42,12 @@ def build_parser() -> argparse.ArgumentParser:
     render = commands.add_parser("render", help="Render a Lean proposition skeleton")
     render.add_argument("contract_id")
     render.add_argument("--output", type=Path)
+
+    compare = commands.add_parser("compare", help="Compare test and proof evidence")
+    compare.add_argument("--faults", type=Path, default=Path("faults/index.json"))
+    compare.add_argument("--output", type=Path, default=Path("artifacts/comparison"))
+    compare.add_argument("--seed", type=int, default=259)
+    compare.add_argument("--samples", type=int, default=100)
     return parser
 
 
@@ -63,6 +70,21 @@ def _find_contract(
 def _run(args: argparse.Namespace) -> int:
     if args.command is None:
         build_parser().print_help()
+        return 0
+
+    if args.command == "compare":
+        report = run_comparison(
+            args.contracts,
+            args.faults,
+            seed=args.seed,
+            fuzz_samples=args.samples,
+        )
+        write_comparison_report(report, args.output)
+        print(
+            f"Compared {len(report.candidates)} candidates; "
+            f"weak-test false negatives: {report.weak_false_negatives}; "
+            f"report: {args.output}"
+        )
         return 0
 
     contracts = load_contract_directory(args.contracts)
